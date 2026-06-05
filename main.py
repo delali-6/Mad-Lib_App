@@ -1,93 +1,61 @@
 # Creating a basic tkinter window
 import tkinter as tk
+
+
+def create_labeled_entry(parent, label_text, width=30):
+    label = tk.Label(parent, text=label_text)
+    label.pack(anchor="w")
+    entry = tk.Entry(parent, width=width)
+    entry.pack(fill="x", pady=(0, 10))
+    return entry
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Mad Libs Game")
-root.geometry("500x500")
+root.geometry("550x600")
 
-title_label = tk.Label(root, text="Welcome to the Mad Libs Game!", font=("Helvetica", 16, "bold"))
-title_label.pack(pady=20)
+# Scrollable form container so all fields stay accessible.
+container = tk.Frame(root)
+container.pack(fill="both", expand=True)
 
-# Create a label and entry for a name in the story
-name_label = tk.Label(root, text="Enter a name:")
-name_label.pack()
-name_entry = tk.Entry(root, width=30)
-name_entry.pack(pady=10)
+canvas = tk.Canvas(container)
+scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
+form_frame = tk.Frame(canvas)
 
-# Create a label and entry for a place in the story
-place_label = tk.Label(root, text="Enter a place:")
-place_label.pack()
-place_entry = tk.Entry(root, width=30)
-place_entry.pack(pady=10)
+form_frame.bind(
+    "<Configure>",
+    lambda e: canvas.configure(scrollregion=canvas.bbox("all")),
+)
 
-# Create a label and entry for an adjective in the story
-adjective_label = tk.Label(root, text="Enter an adjective:")
-adjective_label.pack()
-adjective_entry = tk.Entry(root, width=30)
-adjective_entry.pack(pady=10)
+canvas.create_window((0, 0), window=form_frame, anchor="nw")
+canvas.configure(yscrollcommand=scrollbar.set)
 
-# Create a label and entry for a noun in the story
-noun_label = tk.Label(root, text="Enter a noun:")
-noun_label.pack()
-noun_entry = tk.Entry(root, width=30)
-noun_entry.pack(pady=10)
+canvas.pack(side="left", fill="both", expand=True)
+scrollbar.pack(side="right", fill="y")
 
-# Create a label and entry for an animal
-animal_label = tk.Label(root, text="Enter any animal:")
-animal_label.pack()
-animal_entry = tk.Entry(root, width=30)
-animal_entry.pack(pady=10)
- 
-# Create a label and entry for silly phrase
-silly_phrase_label = tk.Label(root, text="Enter a silly phrase:")
-silly_phrase_label.pack()
-silly_phrase_entry = tk.Entry(root, width=60)
-silly_phrase_entry.pack(pady=10)
- 
-# Create a label and entry for past tense verb
-verb_past_tense_label = tk.Label(root, text="Enter a past tense verb:")
-verb_past_tense_label.pack()
-verb_past_tense_entry = tk.Entry(root, width=30)
-verb_past_tense_entry.pack(pady=10)
- 
-# Create a label and entry for a verb
-verb_label = tk.Label(root, text="Enter a verb:")
-verb_label.pack()
-verb_entry = tk.Entry(root, width=30)
-verb_entry.pack(pady=10)
- 
- # Create a label and entry for a ridiculous title
-ridiculous_title_label = tk.Label(root, text="Enter a ridiculous title:")
-ridiculous_title_label.pack()
-ridiculous_title_entry = tk.Entry(root, width=30)
-ridiculous_title_entry.pack(pady=10)
+title_label = tk.Label(form_frame, text="Welcome to the Mad Libs Game!", font=("Helvetica", 16, "bold"))
+title_label.pack(pady=(20, 15))
 
-# Create a label and entry for plural noun
-plural_noun_label =tk.Label(root, text="Enter a plural noun:")
-plural_noun_label.pack()
-plural_noun_entry = tk.Entry(root, width =30)
-plural_noun_entry.pack(pady=10)
- 
-# Create a label and entry for ridiculous title
-ridiculous_title_label =tk.Label(root, text="Enter a ridiculous title:")
-ridiculous_title_label.pack()
-ridiculous_title_entry = tk.Entry(root, width=30)
-ridiculous_title_entry.pack(pady=10)
+name_entry = create_labeled_entry(form_frame, "Enter a name:")
+place_entry = create_labeled_entry(form_frame, "Enter a place:")
+adjective_entry = create_labeled_entry(form_frame, "Enter an adjective:")
+noun_entry = create_labeled_entry(form_frame, "Enter a noun:")
+animal_entry = create_labeled_entry(form_frame, "Enter any animal:")
+silly_phrase_entry = create_labeled_entry(form_frame, "Enter a silly phrase:", width=60)
+verb_past_tense_entry = create_labeled_entry(form_frame, "Enter a past tense verb:")
+verb_entry = create_labeled_entry(form_frame, "Enter a verb:")
+plural_noun_entry = create_labeled_entry(form_frame, "Enter a plural noun:")
+ridiculous_title_entry = create_labeled_entry(form_frame, "Enter a ridiculous title:")
+food_entry = create_labeled_entry(form_frame, "Enter a food:")
 
-# Create a label and entry for food
-food_label = tk.Label(root, text="Enter a food:")
-food_label.pack()
-food_entry =tk.Entry(root, width=30)
-food_entry.pack(pady=10)
 
-# Create a button to generate the story
 def generate_story():
     fields = {
-        "name": name_entry.get(),
-        "place": place_entry.get(),
-        "adjective": adjective_entry.get(),
-        "noun": noun_entry.get(),
-        # Temporary defaults so the button works while extra inputs are being added.
+        "name": name_entry.get() or "____",
+        "place": place_entry.get() or "____",
+        "adjective": adjective_entry.get() or "____",
+        "noun": noun_entry.get() or "____",
         "plural_noun": plural_noun_entry.get() or "____",
         "animal": animal_entry.get() or "____",
         "silly_phrase": silly_phrase_entry.get() or "____",
@@ -106,15 +74,14 @@ The explorer laughed so hard they {verb_past_tense}, then carefully packed the t
 And from that day on, everyone called them "{ridiculous_title}."
 The End.
 """
-    story = story_template.format_map(fields)
-    story_label.config(text=story)
+    story_label.config(text=story_template.format_map(fields))
 
-# Create a button to generate the story
-generate_button = tk.Button(root, text="Generate Story", command=generate_story)
-generate_button.pack(pady=20)
 
-# Create a label to display the generated story
-story_label = tk.Label(root, text="", wraplength=400, justify="left", font=("Helvetica", 12))
-story_label.pack(pady=20)
+generate_button = tk.Button(form_frame, text="Generate Story", command=generate_story)
+generate_button.pack(pady=10)
+
+story_label = tk.Label(form_frame, text="", wraplength=500, justify="left", font=("Helvetica", 12))
+story_label.pack(padx=15, pady=(10, 20), fill="x")
+
 # Start the main event loop
-root.mainloop()                           
+root.mainloop()
