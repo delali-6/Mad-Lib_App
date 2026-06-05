@@ -8,8 +8,6 @@ root.geometry("500x500")
 title_label = tk.Label(root, text="Welcome to the Mad Libs Game!", font=("Helvetica", 16, "bold"))
 title_label.pack(pady=20)
 
-
-
 # Create a label and entry for a name in the story
 name_label = tk.Label(root, text="Enter a name:")
 name_label.pack()
@@ -34,6 +32,54 @@ noun_label.pack()
 noun_entry = tk.Entry(root, width=30)
 noun_entry.pack(pady=10)
 
+# Create a label and entry for an animal
+animal_label = tk.Label(root, text="Enter any animal:")
+animal_label.pack()
+animal_entry = tk.Entry(root, width=30)
+animal_entry.pack(pady=10)
+ 
+# Create a label and entry for silly phrase
+silly_phrase_label = tk.Label(root, text="Enter a silly phrase:")
+silly_phrase_label.pack()
+silly_phrase_entry = tk.Entry(root, width=60)
+silly_phrase_entry.pack(pady=10)
+ 
+# Create a label and entry for past tense verb
+verb_past_tense_label = tk.Label(root, text="Enter a past tense verb:")
+verb_past_tense_label.pack()
+verb_past_tense_entry = tk.Entry(root, width=30)
+verb_past_tense_entry.pack(pady=10)
+ 
+# Create a label and entry for a verb
+verb_label = tk.Label(root, text="Enter a verb:")
+verb_label.pack()
+verb_entry = tk.Entry(root, width=30)
+verb_entry.pack(pady=10)
+ 
+ # Create a label and entry for a ridiculous title
+ridiculous_title_label = tk.Label(root, text="Enter a ridiculous title:")
+ridiculous_title_label.pack()
+ridiculous_title_entry = tk.Entry(root, width=30)
+ridiculous_title_entry.pack(pady=10)
+
+# Create a label and entry for plural noun
+plural_noun_label =tk.Label(root, text="Enter a plural noun:")
+plural_noun_label.pack()
+plural_noun_entry = tk.Entry(root, width =30)
+plural_noun_entry.pack(pady=10)
+ 
+# Create a label and entry for ridiculous title
+ridiculous_title_label =tk.Label(root, text="Enter a ridiculous title:")
+ridiculous_title_label.pack()
+ridiculous_title_entry = tk.Entry(root, width=30)
+ridiculous_title_entry.pack(pady=10)
+
+# Create a label and entry for food
+food_label = tk.Label(root, text="Enter a food:")
+food_label.pack()
+food_entry =tk.Entry(root, width=30)
+food_entry.pack(pady=10)
+
 # Create a button to generate the story
 def generate_story():
     fields = {
@@ -42,13 +88,13 @@ def generate_story():
         "adjective": adjective_entry.get(),
         "noun": noun_entry.get(),
         # Temporary defaults so the button works while extra inputs are being added.
-        "plural_noun": "____",
-        "animal": "____",
-        "silly_phrase": "____",
-        "verb_past_tense": "____",
-        "verb": "____",
-        "food": "____",
-        "ridiculous_title": "____",
+        "plural_noun": plural_noun_entry.get() or "____",
+        "animal": animal_entry.get() or "____",
+        "silly_phrase": silly_phrase_entry.get() or "____",
+        "verb_past_tense": verb_past_tense_entry.get() or "____",
+        "verb": verb_entry.get() or "____",
+        "food": food_entry.get() or "____",
+        "ridiculous_title": ridiculous_title_entry.get() or "____",
     }
 
     story_template = """One day, a {adjective} explorer named {name} set out to find the legendary {noun} of Doom.
