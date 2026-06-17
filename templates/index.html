@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Stories — Mad Libs World{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <h1 class="hero-title">Pick Your Story!</h1>
+    <p class="hero-subtitle">
+        Choose a Mad Lib adventure, fill in the blanks, and watch the magic unfold. 🎉
+    </p>
+    <div class="stats-bar">
+        <span id="completed-count">0</span>&nbsp;of {{ stories | length }} stories completed
+    </div>
+</div>
+
+<div class="stories-grid" id="stories-grid">
+    {% for story in stories %}
+    <article
+        class="story-card"
+        data-story-id="{{ story.id }}"
+        onclick="window.location.href='{{ url_for('play', story_id=story.id) }}'"
+        role="button"
+        tabindex="0"
+        aria-label="Play {{ story.title }}"
+        onkeydown="if(event.key==='Enter')window.location.href='{{ url_for('play', story_id=story.id) }}'"
+    >
+        <div class="completed-badge">✓ Completed</div>
+        <span class="card-emoji">{{ story.emoji }}</span>
+        <span class="category-badge category-{{ story.category | lower | replace(' ', '-') }}">{{ story.category }}</span>
+        <h2 class="card-title">{{ story.title }}</h2>
+        <p class="card-description">{{ story.description }}</p>
+        <div class="card-meta">
+            <span class="blank-count">{{ story.blanks | length }} fill-ins</span>
+            <span class="play-btn">Play →</span>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+<div class="challenge-cta">
+    <div class="cta-content">
+        <div class="cta-text">
+            <h2 class="cta-title">Ready for a Real Challenge?</h2>
+            <p class="cta-desc">
+                Take on 18 stories across three difficulty levels — play solo or pass the
+                device around for a hilarious team game. The harder the level, the sillier
+                the story!
+            </p>
+            <div class="cta-pills">
+                <span class="cta-pill cta-pill--easy">🟢 Easy · 4 stories</span>
+                <span class="cta-pill cta-pill--medium">🟡 Medium · 6 stories</span>
+                <span class="cta-pill cta-pill--hard">🔴 Hard · 8 stories</span>
+            </div>
+        </div>
+        <a href="{{ url_for('levels') }}" class="btn-challenge">🏆 Challenge Levels →</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    initHomepage({{ stories | map(attribute='id') | list | tojson }});
+</script>
+{% endblock %}
+

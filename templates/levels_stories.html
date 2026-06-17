@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ label.title }} Stories — Mad Libs World{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <a href="{{ url_for('levels') }}" class="back-link">← Back to Challenge Levels</a>
+    <div class="difficulty-header diff-{{ difficulty }}">
+        <div class="diff-label">
+            <span class="diff-icon">{{ label.icon }}</span>
+            <div>
+                <h1 class="diff-title">{{ label.title }}</h1>
+                <p class="diff-desc">
+                    {{ stories | length }} stories &nbsp;·&nbsp; {{ label.blanks }} each &nbsp;·&nbsp; {{ label.desc }}
+                </p>
+            </div>
+        </div>
+        <div class="play-modes">
+            <span class="mode-tag">👤 Solo</span>
+            <span class="mode-tag">👥 Team</span>
+        </div>
+    </div>
+</div>
+
+<div class="stories-grid" id="stories-grid">
+    {% for story in stories %}
+    <article
+        class="story-card"
+        data-story-id="{{ story.id }}"
+        data-difficulty="{{ story.difficulty }}"
+        onclick="window.location.href='{{ url_for('play', story_id=story.id, ref=difficulty) }}'"
+        role="button"
+        tabindex="0"
+        aria-label="Play {{ story.title }}"
+        onkeydown="if(event.key==='Enter')window.location.href='{{ url_for('play', story_id=story.id, ref=difficulty) }}'"
+    >
+        <div class="completed-badge">✓ Completed</div>
+        <span class="card-emoji">{{ story.emoji }}</span>
+        <span class="category-badge category-{{ story.category | lower | replace(' ', '-') }}">{{ story.category }}</span>
+        <h2 class="card-title">{{ story.title }}</h2>
+        <p class="card-description">{{ story.description }}</p>
+        <div class="card-meta">
+            <span class="blank-count">{{ story.blanks | length }} fill-ins</span>
+            <span class="play-btn">Play →</span>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    initLevelPage({{ stories | map(attribute='id') | list | tojson }});
+</script>
+{% endblock %}

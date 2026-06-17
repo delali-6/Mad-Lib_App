@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Challenge Levels — Mad Libs World{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <h1 class="hero-title">Challenge Levels 🏆</h1>
+    <p class="hero-subtitle">
+        Pick a difficulty and test your creative skills — play solo or pass the device around
+        for a hilarious team game where nobody sees each other's answers until the big reveal!
+    </p>
+</div>
+
+<div class="level-cards">
+
+    <a href="{{ url_for('levels_difficulty', difficulty='easy') }}" class="level-card level-card--easy">
+        <div class="level-icon">🟢</div>
+        <div class="level-info">
+            <h2 class="level-title">Easy</h2>
+            <p class="level-stats">{{ counts.easy }} stories &nbsp;·&nbsp; 5–7 fill-ins each</p>
+            <p class="level-desc">{{ labels.easy.desc }}. Great for younger players or a quick warm-up.</p>
+            <div class="play-modes">
+                <span class="mode-tag">👤 Solo</span>
+                <span class="mode-tag">👥 Team</span>
+            </div>
+        </div>
+        <span class="level-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('levels_difficulty', difficulty='medium') }}" class="level-card level-card--medium">
+        <div class="level-icon">🟡</div>
+        <div class="level-info">
+            <h2 class="level-title">Medium</h2>
+            <p class="level-stats">{{ counts.medium }} stories &nbsp;·&nbsp; 10 fill-ins each</p>
+            <p class="level-desc">{{ labels.medium.desc }}. More blanks, more laughs.</p>
+            <div class="play-modes">
+                <span class="mode-tag">👤 Solo</span>
+                <span class="mode-tag">👥 Team</span>
+            </div>
+        </div>
+        <span class="level-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('levels_difficulty', difficulty='hard') }}" class="level-card level-card--hard">
+        <div class="level-icon">🔴</div>
+        <div class="level-info">
+            <h2 class="level-title">Hard</h2>
+            <p class="level-stats">{{ counts.hard }} stories &nbsp;·&nbsp; 12–14 fill-ins each</p>
+            <p class="level-desc">{{ labels.hard.desc }}. Maximum silliness guaranteed.</p>
+            <div class="play-modes">
+                <span class="mode-tag">👤 Solo</span>
+                <span class="mode-tag mode-tag--rec">👥 Team Recommended</span>
+            </div>
+        </div>
+        <span class="level-arrow">→</span>
+    </a>
+
+</div>
+
+<div class="team-explainer">
+    <h3 class="explainer-title">👥 How Team Mode Works</h3>
+    <ol class="explainer-steps">
+        <li>Pick a story and tap <strong>Team Mode</strong> on the play page.</li>
+        <li>Player 1 sees <em>only their blank</em> — nobody else peeks!</li>
+        <li>They fill it in, tap <strong>Next Player →</strong>, then pass the device.</li>
+        <li>Repeat until all blanks are filled — then hit <strong>Generate!</strong></li>
+        <li>Read the story out loud and enjoy the chaos together. 🎉</li>
+    </ol>
+</div>
+
+{% endblock %}

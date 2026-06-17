@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Result: {{ story.title }} — Mad Libs World{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <a href="{{ back_url }}" class="back-link">{{ back_label }}</a>
+    <div class="story-header">
+        <span class="story-emoji">{{ story.emoji }}</span>
+        <div>
+            <span class="category-badge category-{{ story.category | lower | replace(' ', '-') }}">{{ story.category }}</span>
+            <h1 class="story-title">{{ story.title }}</h1>
+        </div>
+    </div>
+</div>
+
+<div class="result-container">
+    <div class="result-banner">
+        🎉 Your Mad Lib is ready!
+    </div>
+
+    <p class="result-story">
+        {% for part in story_parts %}
+            {%- if part.type == 'text' -%}
+                {{ part.content }}
+            {%- else -%}
+                <span class="fill-highlight">{{ part.content }}</span>
+            {%- endif -%}
+        {% endfor %}
+    </p>
+
+    <div class="result-actions">
+        <button onclick="window.print()" class="btn-secondary">🖨️ Print Story</button>
+        <a href="{{ url_for('play', story_id=story.id, ref=request.args.get('ref', '')) }}" class="btn-secondary">🔄 Play Again</a>
+        <a href="{{ back_url }}" class="btn-primary">{{ back_label.replace('← ', '') }}</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    markStoryCompleted({{ story.id }});
+</script>
+{% endblock %}

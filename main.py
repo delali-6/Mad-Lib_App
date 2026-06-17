@@ -1,87 +1,101 @@
-# Creating a basic tkinter window
-import tkinter as tk
+import re
+from flask import Flask, render_template, request, redirect, url_for
+from stories import STORIES
+
+app = Flask(__name__)
+
+# The six original homepage stories
+FEATURED_IDS = {1, 2, 3, 4, 5, 6}
+FEATURED_STORIES = [s for s in STORIES if s["id"] in FEATURED_IDS]
+
+DIFFICULTY_LABELS = {
+    "easy":   {"icon": "🟢", "title": "Easy",   "blanks": "5–7 fill-ins",   "desc": "Perfect for getting started"},
+    "medium": {"icon": "🟡", "title": "Medium", "blanks": "10 fill-ins",    "desc": "A proper creative workout"},
+    "hard":   {"icon": "🔴", "title": "Hard",   "blanks": "12–14 fill-ins", "desc": "Longer stories, best as a team"},
+}
 
 
-def create_labeled_entry(parent, label_text, width=30):
-    label = tk.Label(parent, text=label_text)
-    label.pack(anchor="w")
-    entry = tk.Entry(parent, width=width)
-    entry.pack(fill="x", pady=(0, 10))
-    return entry
+def get_story(story_id):
+    return next((s for s in STORIES if s["id"] == story_id), None)
 
 
-# Create the main window
-root = tk.Tk()
-root.title("Mad Libs Game")
-root.geometry("550x600")
-
-# Scrollable form container so all fields stay accessible.
-container = tk.Frame(root)
-container.pack(fill="both", expand=True)
-
-canvas = tk.Canvas(container)
-scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
-form_frame = tk.Frame(canvas)
-
-form_frame.bind(
-    "<Configure>",
-    lambda e: canvas.configure(scrollregion=canvas.bbox("all")),
-)
-
-canvas.create_window((0, 0), window=form_frame, anchor="nw")
-canvas.configure(yscrollcommand=scrollbar.set)
-
-canvas.pack(side="left", fill="both", expand=True)
-scrollbar.pack(side="right", fill="y")
-
-title_label = tk.Label(form_frame, text="Welcome to the Mad Libs Game!", font=("Helvetica", 16, "bold"))
-title_label.pack(pady=(20, 15))
-
-name_entry = create_labeled_entry(form_frame, "Enter a name:")
-place_entry = create_labeled_entry(form_frame, "Enter a place:")
-adjective_entry = create_labeled_entry(form_frame, "Enter an adjective:")
-noun_entry = create_labeled_entry(form_frame, "Enter a noun:")
-animal_entry = create_labeled_entry(form_frame, "Enter any animal:")
-silly_phrase_entry = create_labeled_entry(form_frame, "Enter a silly phrase:", width=60)
-verb_past_tense_entry = create_labeled_entry(form_frame, "Enter a past tense verb:")
-verb_entry = create_labeled_entry(form_frame, "Enter a verb:")
-plural_noun_entry = create_labeled_entry(form_frame, "Enter a plural noun:")
-ridiculous_title_entry = create_labeled_entry(form_frame, "Enter a ridiculous title:")
-food_entry = create_labeled_entry(form_frame, "Enter a food:")
+def build_story_parts(template, answers):
+    """Split a story template into alternating text and highlighted fill-in parts."""
+    parts = []
+    last_end = 0
+    for match in re.finditer(r"\{(\w+)\}", template):
+        key = match.group(1)
+        start, end = match.span()
+        if template[last_end:start]:
+            parts.append({"type": "text", "content": template[last_end:start]})
+        parts.append({"type": "fill", "content": answers.get(key, "___")})
+        last_end = end
+    if template[last_end:]:
+        parts.append({"type": "text", "content": template[last_end:]})
+    return parts
 
 
-def generate_story():
-    fields = {
-        "name": name_entry.get() or "____",
-        "place": place_entry.get() or "____",
-        "adjective": adjective_entry.get() or "____",
-        "noun": noun_entry.get() or "____",
-        "plural_noun": plural_noun_entry.get() or "____",
-        "animal": animal_entry.get() or "____",
-        "silly_phrase": silly_phrase_entry.get() or "____",
-        "verb_past_tense": verb_past_tense_entry.get() or "____",
-        "verb": verb_entry.get() or "____",
-        "food": food_entry.get() or "____",
-        "ridiculous_title": ridiculous_title_entry.get() or "____",
+@app.route("/")
+def index():
+    return render_template("index.html", stories=FEATURED_STORIES)
+
+
+@app.route("/levels")
+def levels():
+    counts = {d: len([s for s in STORIES if s["difficulty"] == d])
+              for d in ("easy", "medium", "hard")}
+    return render_template("levels.html", labels=DIFFICULTY_LABELS, counts=counts)
+
+
+@app.route("/levels/<difficulty>")
+def levels_difficulty(difficulty):
+    if difficulty not in DIFFICULTY_LABELS:
+        return redirect(url_for("levels"))
+    level_stories = [s for s in STORIES if s["difficulty"] == difficulty]
+    label = DIFFICULTY_LABELS[difficulty]
+    return render_template("levels_stories.html",
+                           stories=level_stories,
+                           difficulty=difficulty,
+                           label=label)
+
+
+@app.route("/play/<int:story_id>")
+def play(story_id):
+    story = get_story(story_id)
+    if not story:
+        return redirect(url_for("index"))
+    ref = request.args.get("ref", "")
+    if ref in DIFFICULTY_LABELS:
+        back_url = url_for("levels_difficulty", difficulty=ref)
+        back_label = f"← Back to {DIFFICULTY_LABELS[ref]['title']} Stories"
+    else:
+        back_url = url_for("index")
+        back_label = "← Back to Stories"
+    return render_template("play.html", story=story,
+                           back_url=back_url, back_label=back_label)
+
+
+@app.route("/result/<int:story_id>", methods=["POST"])
+def result(story_id):
+    story = get_story(story_id)
+    if not story:
+        return redirect(url_for("index"))
+    answers = {
+        blank["key"]: request.form.get(blank["key"], "").strip() or "___"
+        for blank in story["blanks"]
     }
+    story_parts = build_story_parts(story["template"], answers)
+    ref = request.args.get("ref", "")
+    if ref in DIFFICULTY_LABELS:
+        back_url = url_for("levels_difficulty", difficulty=ref)
+        back_label = f"← Back to {DIFFICULTY_LABELS[ref]['title']} Stories"
+    else:
+        back_url = url_for("index")
+        back_label = "← Back to Stories"
+    return render_template("result.html", story=story, story_parts=story_parts,
+                           back_url=back_url, back_label=back_label)
 
-    story_template = """One day, a {adjective} explorer named {name} set out to find the legendary {noun} of Doom.
-Armed with a {adjective} backpack and a {noun}, they traveled through the {adjective} forest where giant {plural_noun} roamed freely.
-Suddenly, a {adjective} {animal} jumped out and shouted, "{silly_phrase}!"
-Without hesitation, the explorer {verb_past_tense} over a fallen {noun} and raced toward a mysterious {place}.
-Inside, they discovered a glowing {noun} that could {verb} anything it touched. Curious, they used it on a {food}, which instantly transformed into {plural_noun}.
-The explorer laughed so hard they {verb_past_tense}, then carefully packed the treasure and returned home to {verb} with their friends.
-And from that day on, everyone called them "{ridiculous_title}."
-The End.
-"""
-    story_label.config(text=story_template.format_map(fields))
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
-generate_button = tk.Button(form_frame, text="Generate Story", command=generate_story)
-generate_button.pack(pady=10)
-
-story_label = tk.Label(form_frame, text="", wraplength=500, justify="left", font=("Helvetica", 12))
-story_label.pack(padx=15, pady=(10, 20), fill="x")
-
-# Start the main event loop
-root.mainloop()

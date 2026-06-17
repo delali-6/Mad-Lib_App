@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ story.title }} — Mad Libs World{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <a href="{{ back_url }}" class="back-link">{{ back_label }}</a>
+    <div class="story-header">
+        <span class="story-emoji">{{ story.emoji }}</span>
+        <div>
+            <span class="category-badge category-{{ story.category | lower | replace(' ', '-') }}">{{ story.category }}</span>
+            <h1 class="story-title">{{ story.title }}</h1>
+            <p class="story-description">{{ story.description }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="play-container">
+
+    {# ── Mode toggle ── #}
+    <div class="mode-toggle">
+        <button type="button" id="btn-solo" class="mode-btn mode-btn--active" onclick="setPlayMode('solo')">
+            👤 Solo
+        </button>
+        <button type="button" id="btn-team" class="mode-btn" onclick="setPlayMode('team')">
+            👥 Team Mode
+        </button>
+    </div>
+
+    {# ── Solo instructions (default) ── #}
+    <div id="solo-instructions" class="instructions">
+        💡 Fill in every blank below — the sillier the better! Then hit <strong>Generate My Story!</strong>
+    </div>
+
+    {# ── Team instructions (hidden until team mode activated) ── #}
+    <div id="team-instructions" class="instructions instructions--team" style="display:none">
+        👥 <strong>Team Mode!</strong> Each player sees <em>only their own blank</em> — no peeking!
+        Fill yours in and pass the device to the next person.
+    </div>
+
+    <form
+        method="POST"
+        action="{{ url_for('result', story_id=story.id, ref=request.args.get('ref', '')) }}"
+        class="blanks-form"
+        id="blanks-form"
+    >
+        {# ── Solo mode: all blanks visible ── #}
+        <div class="blanks-grid" id="solo-grid">
+            {% for blank in story.blanks %}
+            <div class="blank-field" data-index="{{ loop.index0 }}" data-key="{{ blank.key }}">
+                <label for="{{ blank.key }}" class="blank-label">
+                    <span class="field-number">{{ loop.index }}</span>
+                    {{ blank.label }}
+                </label>
+                <input
+                    type="text"
+                    id="{{ blank.key }}"
+                    name="{{ blank.key }}"
+                    class="blank-input"
+                    placeholder="{{ blank.hint }}"
+                    autocomplete="off"
+                    maxlength="60"
+                >
+            </div>
+            {% endfor %}
+        </div>
+
+        {# ── Team mode panel (hidden until activated) ── #}
+        <div id="team-panel" style="display:none">
+            <div class="team-card">
+                <div class="team-player-badge">🎮 Player <span id="team-player-num">1</span></div>
+                <div class="team-prompt">
+                    <span class="field-number" id="team-field-num">1</span>
+                    <span id="team-label-text">label</span>
+                </div>
+                <p class="team-hint" id="team-hint-text"></p>
+                <input
+                    type="text"
+                    id="team-input"
+                    class="blank-input team-input"
+                    autocomplete="off"
+                    maxlength="60"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault();teamNext();}"
+                >
+                <p class="team-progress">Blank <span id="team-current">1</span> of <span id="team-total">{{ story.blanks | length }}</span></p>
+            </div>
+            <div class="form-actions" style="margin-top:1.5rem">
+                <button type="button" id="team-next-btn" class="btn-primary" onclick="teamNext()">
+                    Next Player →
+                </button>
+            </div>
+        </div>
+
+        {# ── Solo submit (hidden in team mode, team submits via JS) ── #}
+        <div class="form-actions" id="solo-submit">
+            <button type="submit" class="btn-primary">
+                🎲 Generate My Story!
+            </button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    initPlayPage({{ story.blanks | tojson }});
+</script>
+{% endblock %}
+
