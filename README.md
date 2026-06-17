@@ -93,3 +93,8 @@ Open `stories.py` and add a new entry to the `STORIES` list following the same s
 - `title`, `description`, `emoji`, `category`
 - `blanks` — list of `{ key, label, hint }` dicts
 - `template` — story string using `{key}` placeholders matching the blank keys
+
+
+One of my strengths is being able to integrate AI into my development workflow. It allows me to prototype ideas quickly, automate repetitive tasks, and focus more on the creative and technical decisions. For example, I built a Mad Libs web app using a mix of my own code and AI-assisted development to speed up the process
+
+I see AI as a collaborator — not something that replaces my skills, but something that enhances them. It helps me build faster, iterate more, and focus on the parts of development that require creativity and problem‑solving.
