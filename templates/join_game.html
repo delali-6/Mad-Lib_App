@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Join a Team Game — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <h1 class="hero-title">Join a Team Game 🎮</h1>
+    <p class="hero-subtitle">
+        Enter the 6-character invite code your host shared with you.
+    </p>
+</div>
+
+<div class="join-box">
+    {% if error %}
+    <div class="join-error">⚠️ {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('join_game') }}" autocomplete="off">
+        <label class="join-label" for="code">Game Code</label>
+        <input
+            type="text"
+            id="code"
+            name="code"
+            class="code-input"
+            maxlength="6"
+            placeholder="ABC123"
+            autofocus
+            spellcheck="false"
+            oninput="this.value=this.value.toUpperCase()"
+        >
+        <button type="submit" class="btn-primary" style="width:100%">Join Game →</button>
+    </form>
+
+    <p class="join-note">Don't have a code? Ask your host to share one, or
+        <a href="{{ url_for('levels') }}">start your own game</a>.
+    </p>
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Waiting… — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="wait-container">
+
+    <span class="wait-spinner">⏳</span>
+    <h1 class="wait-title">Waiting for everyone…</h1>
+    <p class="wait-subtitle">
+        {{ story.emoji }} {{ story.title }} · Game <strong>{{ code }}</strong>
+    </p>
+
+    <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"
+             style="width: {{ ((filled / total) * 100) | round | int }}%">
+        </div>
+    </div>
+    <p class="progress-label">
+        <strong><span id="fill-count">{{ filled }}</span></strong>
+        of {{ total }} answers in
+    </p>
+
+    <p class="wait-note">
+        This page updates automatically — you'll be taken to the story
+        the moment everyone is done. 🎉
+    </p>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function poll() {
+    setTimeout(function () {
+        fetch('/game/{{ code }}/status')
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                document.getElementById('fill-count').textContent = data.filled;
+                var pct = Math.round((data.filled / data.total) * 100);
+                document.getElementById('progress-fill').style.width = pct + '%';
+                if (data.ready) {
+                    window.location.href = '/game/{{ code }}/result';
+                } else {
+                    poll();
+                }
+            })
+            .catch(function () { poll(); });
+    }, 2500);
+}());
+</script>
+{% endblock %}

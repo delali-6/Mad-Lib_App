@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Team Game Created — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <a href="{{ url_for('levels') }}" class="back-link">← Back to Challenge Levels</a>
+</div>
+
+<div class="lobby-container">
+
+    <div class="invite-code-card">
+        <p class="invite-code-label">Your Game Code</p>
+        <div class="invite-code-display" id="code-display">{{ code }}</div>
+        <div class="invite-code-url" id="join-url-display">{{ request.host_url.rstrip('/') }}{{ join_path }}</div>
+        <button class="copy-btn" id="copy-btn" onclick="copyCode()">📋 Copy Join Link</button>
+    </div>
+
+    <div class="lobby-story-strip">
+        <span class="lobby-story-emoji">{{ story.emoji }}</span>
+        <div>
+            <p class="lobby-story-label">Story</p>
+            <p class="lobby-story-title">{{ story.title }}</p>
+        </div>
+        <span class="lobby-story-blanks">{{ story.blanks | length }} blanks</span>
+    </div>
+
+    <div class="lobby-steps">
+        <h3>📋 How to play</h3>
+        <ol>
+            <li>Share the code <strong>{{ code }}</strong> or the link above with your team.</li>
+            <li>Each player opens the link on their own device and enters their name.</li>
+            <li>Everyone gets one blank to fill in — no peeking at others!</li>
+            <li>Once everyone is done, the finished story appears on everyone's screen.</li>
+            <li><strong>You</strong> go first — click below to join as Player 1.</li>
+        </ol>
+    </div>
+
+    <div class="lobby-actions">
+        <a href="{{ url_for('game_join', code=code) }}" class="btn-primary">
+            🎮 Join as Player 1 →
+        </a>
+        <p class="lobby-note">
+            Up to {{ story.blanks | length }} players can join (one blank each).
+            Extra players can still spectate the result!
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyCode() {
+    var url = document.getElementById('join-url-display').textContent.trim();
+    navigator.clipboard.writeText(url).then(function () {
+        var btn = document.getElementById('copy-btn');
+        btn.textContent = '✓ Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () {
+            btn.textContent = '📋 Copy Join Link';
+            btn.classList.remove('copied');
+        }, 2500);
+    });
+}
+</script>
+{% endblock %}

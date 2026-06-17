@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ story.title }} — Mad Libs World{% endblock %}
+{% block title %}{{ story.title }} — Imagine Tales World{% endblock %}
 
 {% block content %}
 
@@ -96,6 +96,10 @@
             <button type="submit" class="btn-primary">
                 🎲 Generate My Story!
             </button>
+            <p class="team-game-link">
+                Playing with friends on separate devices?
+                <a href="{{ url_for('game_start', story_id=story.id) }}">🎮 Start a Team Game with Invite Code</a>
+            </p>
         </div>
 
     </form>

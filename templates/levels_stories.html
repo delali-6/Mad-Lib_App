@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ label.title }} Stories — Mad Libs World{% endblock %}
+{% block title %}{{ label.title }} Stories — Imagine Tales World{% endblock %}
 
 {% block content %}
 
@@ -42,6 +42,15 @@
         <div class="card-meta">
             <span class="blank-count">{{ story.blanks | length }} fill-ins</span>
             <span class="play-btn">Play →</span>
+        </div>
+        <div class="card-team-action">
+            <button
+                class="team-game-btn"
+                onclick="event.stopPropagation(); window.location.href='{{ url_for('game_start', story_id=story.id) }}'"
+                aria-label="Start a team game for {{ story.title }}"
+            >
+                🎮 Team Game (Invite Code)
+            </button>
         </div>
     </article>
     {% endfor %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Oops — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="error-box">
+    <span class="error-emoji">😬</span>
+    <h1>Oops!</h1>
+    <p>{{ msg }}</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="{{ url_for('join_game') }}" class="btn-secondary">🎮 Try Another Code</a>
+        <a href="{{ url_for('index') }}" class="btn-primary">🏠 Go Home</a>
+    </div>
+</div>
+
+{% endblock %}

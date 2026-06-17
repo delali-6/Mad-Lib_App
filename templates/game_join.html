@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Join {{ story.title }} — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="game-join-box">
+
+    <div class="game-code-badge">Game · {{ code }}</div>
+
+    <div class="lobby-story-strip">
+        <span class="lobby-story-emoji">{{ story.emoji }}</span>
+        <div>
+            <p class="lobby-story-label">Story</p>
+            <p class="lobby-story-title">{{ story.title }}</p>
+        </div>
+    </div>
+
+    {% if spots_left > 0 %}
+
+    <div class="spots-bar">
+        <strong>{{ spots_left }}</strong> spot{{ 's' if spots_left != 1 }} remaining
+        &nbsp;·&nbsp; {{ filled }} of {{ total }} blanks taken
+    </div>
+
+    <form method="POST" action="{{ url_for('game_join', code=code) }}" autocomplete="off">
+        <label class="join-label" for="name">Your name</label>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            class="name-input"
+            placeholder="e.g. Jessica"
+            maxlength="30"
+            autofocus
+            required
+        >
+        <button type="submit" class="btn-primary" style="width:100%">
+            Join — Get My Blank →
+        </button>
+    </form>
+
+    {% else %}
+
+    <div class="join-error" style="margin-top:1rem">
+        😬 All {{ total }} blanks are taken! The game is full.<br>
+        You can still <a href="{{ url_for('game_result', code=code) }}">view the result</a>
+        once everyone submits.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

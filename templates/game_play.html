@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Your Turn — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="game-play-container">
+
+    <div class="player-hero">
+        <div class="player-avatar">🎮</div>
+        <p class="player-name-display">{{ player_name }}</p>
+        <p class="player-story">{{ story.emoji }} {{ story.title }} · Game {{ code }}</p>
+    </div>
+
+    {% if already_answered %}
+
+    <div class="blank-card" style="text-align:center">
+        <p style="font-size:2.5rem;margin-bottom:0.5rem">✅</p>
+        <p style="font-size:1.1rem;font-weight:800;color:var(--success)">Answer submitted!</p>
+        <p style="color:var(--muted);font-size:0.9rem;margin-top:0.5rem">
+            Waiting for the other players…
+        </p>
+        <a href="{{ url_for('game_wait', code=code) }}" class="btn-primary" style="margin-top:1.5rem;display:inline-block">
+            Go to Waiting Room →
+        </a>
+    </div>
+
+    {% else %}
+
+    <div class="blank-card">
+        <p class="blank-card-label">Blank {{ blank_num }} of {{ total }}</p>
+        <div class="blank-card-question">
+            <span class="field-number">{{ blank_num }}</span>
+            <span>{{ blank.label }}</span>
+        </div>
+        <p class="blank-hint">{{ blank.hint }}</p>
+
+        <form method="POST" action="{{ url_for('game_play', code=code) }}" autocomplete="off">
+            <input
+                type="text"
+                name="answer"
+                class="big-blank-input"
+                placeholder="{{ blank.hint }}"
+                maxlength="60"
+                autofocus
+                required
+            >
+            <div style="text-align:center">
+                <button type="submit" class="btn-primary">Submit My Answer →</button>
+            </div>
+        </form>
+
+        <p class="no-peek">🙈 No peeking at anyone else's screen!</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

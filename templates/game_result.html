@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ story.title }} — Team Result — Imagine Tales World{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <a href="{{ url_for('levels') }}" class="back-link">← Back to Challenge Levels</a>
+    <div class="story-header">
+        <span class="story-emoji">{{ story.emoji }}</span>
+        <div>
+            <span class="category-badge category-{{ story.category | lower | replace(' ', '-') }}">{{ story.category }}</span>
+            <h1 class="story-title">{{ story.title }}</h1>
+        </div>
+    </div>
+</div>
+
+<div class="result-container">
+
+    <div class="result-banner">
+        🎉 The Team Story is Ready!
+    </div>
+
+    <p class="result-story">
+        {% for part in story_parts %}
+            {%- if part.type == 'text' -%}
+                {{ part.content }}
+            {%- else -%}
+                <span class="team-fill-highlight" title="Answered by {{ assignments.get(part.key, '?') }}">{{ part.content }}<span class="fill-player-tag">{{ assignments.get(part.key, '?') }}</span></span>
+            {%- endif -%}
+        {% endfor %}
+    </p>
+
+    {# ── Player legend ── #}
+    {% if assignments %}
+    <div class="result-legend">
+        <p class="legend-title">👥 Who answered what</p>
+        <div class="legend-players">
+            {% for key, player in assignments.items() %}
+            {% set blank = story.blanks | selectattr('key', 'equalto', key) | first %}
+            <div class="legend-player">
+                <span class="legend-dot"></span>
+                <strong>{{ player }}</strong>
+                {% if blank %}&nbsp;— {{ blank.label }}{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="result-actions" style="margin-top:1.5rem">
+        <button onclick="window.print()" class="btn-secondary">🖨️ Print Story</button>
+        <a href="{{ url_for('game_start', story_id=story.id) }}" class="btn-secondary">🔄 Play Again</a>
+        <a href="{{ url_for('levels') }}" class="btn-primary">🏆 Back to Levels</a>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    markStoryCompleted({{ story.id }});
+</script>
+{% endblock %}

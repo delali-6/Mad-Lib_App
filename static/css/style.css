@@ -522,6 +522,15 @@ a { color: inherit; }
 
 .nav-link--challenge:hover { background: white; color: var(--primary); }
 
+.nav-link--join {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary);
+    border: 1.5px solid white;
+    font-weight: 900;
+}
+
+.nav-link--join:hover { background: white; color: var(--primary); opacity: 0.9; }
+
 /* ============================================================
    STATS BAR (homepage)
    ============================================================ */
@@ -924,3 +933,464 @@ a { color: inherit; }
 
     .team-card { padding: 1.5rem 1.25rem; }
 }
+
+/* ============================================================
+   JOIN GAME PAGE
+   ============================================================ */
+.join-box {
+    max-width: 420px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.join-error {
+    background: #ffebee;
+    color: #c62828;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.join-label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+.code-input {
+    width: 100%;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Courier New', monospace;
+    color: var(--primary);
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+    text-transform: uppercase;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.join-note {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.join-note a { color: var(--primary); font-weight: 700; text-decoration: none; }
+.join-note a:hover { text-decoration: underline; }
+
+/* ============================================================
+   GAME LOBBY
+   ============================================================ */
+.lobby-container {
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.invite-code-card {
+    background: linear-gradient(135deg, #6c63ff, #ff6584);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.invite-code-label {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.82;
+    margin-bottom: 0.4rem;
+}
+
+.invite-code-display {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 0.75rem;
+    font-family: 'Courier New', monospace;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.invite-code-url {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 0.55rem 1rem;
+    font-size: 0.78rem;
+    font-family: monospace;
+    word-break: break-all;
+    margin-bottom: 1rem;
+    opacity: 0.88;
+}
+
+.copy-btn {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 0.55rem 1.5rem;
+    border-radius: 50px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+
+.copy-btn:hover { transform: scale(1.05); }
+.copy-btn.copied { background: var(--success); color: white; }
+
+.lobby-story-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.25rem;
+}
+
+.lobby-story-emoji { font-size: 2.25rem; line-height: 1; flex-shrink: 0; }
+.lobby-story-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--muted); margin-bottom: 0.15rem; }
+.lobby-story-title { font-size: 1rem; font-weight: 800; color: var(--text); }
+.lobby-story-blanks { margin-left: auto; font-size: 0.8rem; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+
+.lobby-steps {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.lobby-steps h3 { font-size: 0.95rem; font-weight: 900; color: var(--primary); margin-bottom: 0.85rem; }
+
+.lobby-steps ol { padding-left: 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.lobby-steps li { font-size: 0.9rem; line-height: 1.5; color: var(--text); }
+
+.lobby-actions { text-align: center; }
+
+.lobby-note {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* ============================================================
+   GAME JOIN
+   ============================================================ */
+.game-join-box {
+    max-width: 480px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+}
+
+.game-code-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #6c63ff, #ff6584);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1.25rem;
+}
+
+.spots-bar {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.spots-bar strong { color: var(--primary); }
+
+.name-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: var(--font);
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+/* ============================================================
+   GAME PLAY (single blank)
+   ============================================================ */
+.game-play-container {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.player-hero {
+    text-align: center;
+    background: linear-gradient(135deg, #eef2ff, #fde8ee);
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.player-avatar { font-size: 3rem; line-height: 1; margin-bottom: 0.5rem; }
+
+.player-name-display { font-size: 1.4rem; font-weight: 900; color: var(--text); margin-bottom: 0.25rem; }
+.player-story { font-size: 0.85rem; color: var(--muted); }
+
+.blank-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--primary);
+}
+
+.blank-card-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.blank-card-question {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+}
+
+.blank-card-question .field-number { width: 28px; height: 28px; font-size: 0.75rem; flex-shrink: 0; }
+
+.blank-hint { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-bottom: 1.5rem; }
+
+.big-blank-input {
+    width: 100%;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 0.85rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: var(--font);
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.big-blank-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.no-peek { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 1rem; font-style: italic; }
+
+/* ============================================================
+   GAME WAIT
+   ============================================================ */
+.wait-container {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2rem;
+}
+
+.wait-spinner {
+    font-size: 4rem;
+    display: block;
+    margin: 0 auto 1rem;
+    animation: spin-bounce 2s ease-in-out infinite;
+}
+
+@keyframes spin-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.wait-title { font-size: 1.7rem; font-weight: 900; color: var(--text); margin-bottom: 0.4rem; }
+.wait-subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+.progress-track {
+    background: var(--bg);
+    border-radius: 50px;
+    height: 18px;
+    overflow: hidden;
+    margin-bottom: 0.65rem;
+    border: 2px solid var(--border);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50px;
+    transition: width 0.5s ease;
+    min-width: 4px;
+}
+
+.progress-label { font-size: 0.9rem; font-weight: 700; color: var(--muted); margin-bottom: 1.5rem; }
+.progress-label strong { color: var(--primary); font-size: 1rem; }
+.wait-note { font-size: 0.82rem; color: var(--muted); font-style: italic; line-height: 1.6; }
+
+/* ============================================================
+   TEAM GAME RESULT
+   ============================================================ */
+.team-fill-highlight {
+    display: inline-block;
+    background: linear-gradient(135deg, #eef2ff, #fde8ee);
+    color: var(--primary);
+    font-weight: 800;
+    padding: 0.05rem 0.4rem;
+    border-radius: 6px;
+    border-bottom: 2.5px solid var(--primary);
+    position: relative;
+    cursor: default;
+}
+
+.fill-player-tag {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    font-size: 0.52rem;
+    font-weight: 900;
+    padding: 0.1rem 0.35rem;
+    border-radius: 50px;
+    margin-left: 3px;
+    vertical-align: super;
+    line-height: 1;
+    opacity: 0.85;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-legend {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border);
+}
+
+.legend-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+}
+
+.legend-players { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.legend-player {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg);
+    border-radius: 50px;
+    padding: 0.3rem 0.85rem 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+/* ============================================================
+   GAME ERROR
+   ============================================================ */
+.error-box {
+    max-width: 460px;
+    margin: 3rem auto;
+    text-align: center;
+    background: white;
+    border-radius: var(--radius);
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow);
+}
+
+.error-emoji { font-size: 4rem; display: block; margin-bottom: 1rem; }
+.error-box h1 { font-size: 1.8rem; font-weight: 900; color: var(--text); margin-bottom: 0.75rem; }
+.error-box p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+
+/* ============================================================
+   CARD TEAM BUTTON
+   ============================================================ */
+.card-team-action {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+.team-game-btn {
+    width: 100%;
+    background: transparent;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    border-radius: 50px;
+    padding: 0.45rem 1rem;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.team-game-btn:hover { background: var(--primary); color: white; }
+
+/* Team game link below solo submit */
+.team-game-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.team-game-link a { color: var(--primary); font-weight: 700; text-decoration: none; }
+.team-game-link a:hover { text-decoration: underline; }

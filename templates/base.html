@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mad Libs World{% endblock %}</title>
+    <title>{% block title %}Imagine Tales World{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -14,11 +14,12 @@
         <div class="container header-inner">
             <a href="{{ url_for('index') }}" class="logo">
                 <span class="logo-emoji">📖</span>
-                <span class="logo-text">Mad Libs World</span>
+                <span class="logo-text">Imagine Tales World</span>
             </a>
             <nav class="site-nav">
                 <a href="{{ url_for('index') }}" class="nav-link">🏠 Stories</a>
                 <a href="{{ url_for('levels') }}" class="nav-link nav-link--challenge">🏆 Challenge Levels</a>
+                <a href="{{ url_for('join_game') }}" class="nav-link nav-link--join">🎮 Join Game</a>
             </nav>
         </div>
     </header>
