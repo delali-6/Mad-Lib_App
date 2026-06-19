@@ -12,9 +12,11 @@
     </p>
 
     <div class="progress-track">
-        <div class="progress-fill" id="progress-fill"
-             style="width: {{ ((filled / total) * 100) | round | int }}%">
-        </div>
+        <div
+            class="progress-fill"
+            id="progress-fill"
+            data-progress="{{ (((filled / total) * 100) | round) }}"
+        ></div>
     </div>
     <p class="progress-label">
         <strong><span id="fill-count">{{ filled }}</span></strong>
@@ -33,13 +35,20 @@
 {% block scripts %}
 <script>
 (function poll() {
+    function setProgressWidth(pct) {
+        document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    var initialPct = Number(document.getElementById('progress-fill').dataset.progress || 0);
+    setProgressWidth(initialPct);
+
     setTimeout(function () {
         fetch('/game/{{ code }}/status')
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 document.getElementById('fill-count').textContent = data.filled;
                 var pct = Math.round((data.filled / data.total) * 100);
-                document.getElementById('progress-fill').style.width = pct + '%';
+                setProgressWidth(pct);
                 if (data.ready) {
                     window.location.href = '/game/{{ code }}/result';
                 } else {

@@ -18,11 +18,12 @@
     <article
         class="story-card"
         data-story-id="{{ story.id }}"
-        onclick="window.location.href='{{ url_for('play', story_id=story.id) }}'"
+        data-play-url="{{ url_for('play', story_id=story.id) }}"
+        onclick="window.location.href=this.dataset.playUrl;"
         role="button"
         tabindex="0"
         aria-label="Play {{ story.title }}"
-        onkeydown="if(event.key==='Enter')window.location.href='{{ url_for('play', story_id=story.id) }}'"
+        onkeydown="if(event.key==='Enter'){window.location.href=this.dataset.playUrl;}"
     >
         <div class="completed-badge">✓ Completed</div>
         <span class="card-emoji">{{ story.emoji }}</span>
@@ -59,8 +60,11 @@
 {% endblock %}
 
 {% block scripts %}
+<script id="story-ids-json" type="application/json">{{ stories | map(attribute='id') | list | tojson }}</script>
 <script>
-    initHomepage({{ stories | map(attribute='id') | list | tojson }});
+    var storyIdsEl = document.getElementById('story-ids-json');
+    var storyIds = storyIdsEl ? JSON.parse(storyIdsEl.textContent || '[]') : [];
+    initHomepage(storyIds);
 </script>
 {% endblock %}
 
